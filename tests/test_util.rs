@@ -1,6 +1,6 @@
 extern crate crypto;
 
-use crypto::util::{hex_string_to_base64};
+use crypto::util::{hex_string_to_base64, hex_string_xor};
 
 #[test]
 fn test_hex_to_base64() {
@@ -9,4 +9,12 @@ fn test_hex_to_base64() {
     let encoded = hex_string_to_base64(&hex);
     assert_eq!(encoded, ("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIG".to_string() +
                          "EgcG9pc29ub3VzIG11c2hyb29t"));
+}
+
+#[test]
+fn test_hex_xor() {
+    let hex1 = "1c0111001f010100061a024b53535009181c";
+    let hex2 = "686974207468652062756c6c277320657965";
+    let result = hex_string_xor(&hex1.to_string(), &hex2.to_string());
+    assert_eq!(result, "746865206b696420646f6e277420706c6179");
 }
