@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use util::{hex_string_xor};
 use rustc_serialize::hex::{FromHex, ToHex};
 
-#[derive(Clone)]
+#[derive(Clone, Default)]
 pub struct Fit {
     pub score: f32,
     pub decoded: String,
@@ -54,6 +54,10 @@ pub fn get_best_fit(encoded: &String) -> Fit {
         };
     }
 
-    fits.sort_by(|x, y| y.score.partial_cmp(&x.score).unwrap_or(Equal));
-    fits[0].clone()
+    if fits.len() > 0 {
+        fits.sort_by(|x, y| y.score.partial_cmp(&x.score).unwrap_or(Equal));
+        fits[0].clone()
+    } else {
+        Fit { .. Default::default() }
+    }
 }
