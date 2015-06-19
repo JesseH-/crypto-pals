@@ -1,5 +1,18 @@
+extern crate rustc_serialize;
+
 use std::ascii::AsciiExt;
+use std::cmp::Ordering::{Equal};
 use std::collections::HashMap;
+
+use util::{hex_string_xor};
+use rustc_serialize::hex::{FromHex, ToHex};
+
+#[derive(Clone)]
+pub struct Fit {
+    pub score: f32,
+    pub decoded: String,
+    pub pad: String,
+}
 
 fn get_letter_frequency_map() -> HashMap<char, f32> {
     let frequencies = vec![('e', 0.1041442), ('t', 0.0729357), ('a', 0.0651738),
@@ -25,4 +38,19 @@ pub fn score_freq(s: &String) -> f32 {
         };
     };
     score
+}
+
+pub fn get_best_fit(encoded: &String) -> Fit {
+    let mut fits = Vec::new();
+    for i in 0..128 {
+        let u = i as u8;
+        let rep = (0..encoded.len()).map(|_| u).collect::<Vec<u8>>().to_hex();
+        let bytes = hex_string_xor(&encoded, &rep).from_hex().unwrap();
+        let result = String::from_utf8(bytes).unwrap();
+        let score = score_freq(&result);
+        fits.push(Fit { score: score, decoded: result, pad: rep });
+    }
+
+    fits.sort_by(|x, y| y.score.partial_cmp(&x.score).unwrap_or(Equal));
+    fits[0].clone()
 }
