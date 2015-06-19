@@ -46,9 +46,12 @@ pub fn get_best_fit(encoded: &String) -> Fit {
         let u = i as u8;
         let rep = (0..encoded.len()).map(|_| u).collect::<Vec<u8>>().to_hex();
         let bytes = hex_string_xor(&encoded, &rep).from_hex().unwrap();
-        let result = String::from_utf8(bytes).unwrap();
-        let score = score_freq(&result);
-        fits.push(Fit { score: score, decoded: result, pad: rep });
+        let result = String::from_utf8(bytes);
+        match result {
+            Ok(s) => fits.push(Fit { score: score_freq(&s), decoded: s,
+                                     pad: rep }),
+            Err(_) => {}
+        };
     }
 
     fits.sort_by(|x, y| y.score.partial_cmp(&x.score).unwrap_or(Equal));
