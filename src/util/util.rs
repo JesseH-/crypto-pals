@@ -11,6 +11,11 @@ fn fixed_xor(v1: &Vec<u8>, v2: &Vec<u8>) -> Vec<u8> {
     v1.iter().zip(v2.iter()).map(|(x, y)| *x ^ *y).collect::<Vec<u8>>()
 }
 
+fn repeating_xor(bytes: &[u8], key: &[u8]) -> Vec<u8> {
+    bytes.iter().zip(key.iter().cycle()).map(|(x, y)| *x ^ *y)
+        .collect::<Vec<u8>>()
+}
+
 pub fn hex_string_to_base64(hex: &String) -> String {
     let bytes = hex_string_to_bytes(hex);
     bytes.to_base64(STANDARD)
@@ -21,4 +26,8 @@ pub fn hex_string_xor(hex1: &String, hex2: &String) -> String {
     let bytes2 = hex_string_to_bytes(hex2);
     let xor = fixed_xor(&bytes1, &bytes2);
     xor.to_hex()
+}
+
+pub fn string_repeating_xor(message: &String, key: &String) -> String {
+    repeating_xor(message.as_bytes(), key.as_bytes()).to_hex()
 }
