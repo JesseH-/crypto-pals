@@ -1,6 +1,6 @@
 extern crate crypto;
 
-use crypto::util::{hex_string_to_base64, hex_string_xor};
+use crypto::util::{hex_string_to_base64, hex_string_xor, string_edit_distance};
 
 #[test]
 fn test_hex_to_base64() {
@@ -17,4 +17,11 @@ fn test_hex_xor() {
     let hex2 = "686974207468652062756c6c277320657965";
     let result = hex_string_xor(&hex1.to_string(), &hex2.to_string());
     assert_eq!(result, "746865206b696420646f6e277420706c6179");
+}
+
+#[test]
+fn test_edit_distance() {
+    let string1 = "this is a test".to_string();
+    let string2 = "wokka wokka!!!".to_string();
+    assert_eq!(string_edit_distance(&string1, &string2), 37);
 }
