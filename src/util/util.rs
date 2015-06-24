@@ -7,7 +7,7 @@ fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
         .expect("Failed to convert string to hex")
 }
 
-fn fixed_xor(v1: &Vec<u8>, v2: &Vec<u8>) -> Vec<u8> {
+fn fixed_xor(v1: &[u8], v2: &[u8]) -> Vec<u8> {
     v1.iter().zip(v2.iter()).map(|(x, y)| *x ^ *y).collect::<Vec<u8>>()
 }
 
