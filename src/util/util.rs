@@ -1,10 +1,16 @@
-use rustc_serialize::base64::{ToBase64, STANDARD};
+use rustc_serialize::base64::{FromBase64, ToBase64, STANDARD};
 use rustc_serialize::hex::{FromHex, ToHex};
 
 pub fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
     hex.from_hex()
         .ok()
         .expect("Failed to convert string from hex")
+}
+
+pub fn base64_string_to_bytes(base64: &str) -> Vec<u8> {
+    base64.from_base64()
+        .ok()
+        .expect("Failed to convert string from base64")
 }
 
 pub fn fixed_xor(v1: &[u8], v2: &[u8]) -> Vec<u8> {
@@ -35,6 +41,11 @@ pub fn edit_distance(bytes1: &[u8], bytes2: &[u8]) -> u64 {
 pub fn hex_string_to_base64(hex: &str) -> String {
     let bytes = hex_string_to_bytes(hex);
     bytes.to_base64(STANDARD)
+}
+
+pub fn base64_string_to_hex(base64: &str) -> String {
+    base64_string_to_bytes(base64)
+        .to_hex()
 }
 
 pub fn hex_string_xor(hex1: &str, hex2: &str) -> String {
