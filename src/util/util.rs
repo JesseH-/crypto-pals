@@ -1,17 +1,17 @@
 use rustc_serialize::base64::{ToBase64, STANDARD};
 use rustc_serialize::hex::{FromHex, ToHex};
 
-fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
+pub fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
     hex.from_hex()
         .ok()
         .expect("Failed to convert string from hex")
 }
 
-fn fixed_xor(v1: &[u8], v2: &[u8]) -> Vec<u8> {
+pub fn fixed_xor(v1: &[u8], v2: &[u8]) -> Vec<u8> {
     v1.iter().zip(v2.iter()).map(|(x, y)| *x ^ *y).collect::<Vec<u8>>()
 }
 
-fn repeating_xor(bytes: &[u8], key: &[u8]) -> Vec<u8> {
+pub fn repeating_xor(bytes: &[u8], key: &[u8]) -> Vec<u8> {
     bytes.iter().zip(key.iter().cycle()).map(|(x, y)| *x ^ *y)
         .collect::<Vec<u8>>()
 }
@@ -22,7 +22,7 @@ fn bit_count(x: u64) -> u64 {
     (((y + (y >> 4)) & 0x0f0f0f0f) * 0x01010101) >> 24
 }
 
-fn edit_distance(bytes1: &[u8], bytes2: &[u8]) -> u64 {
+pub fn edit_distance(bytes1: &[u8], bytes2: &[u8]) -> u64 {
     let xored = bytes1.iter().zip(bytes2.iter()).map(|(&x, &y)| x ^ y)
         .collect::<Vec<u8>>();
     let mut i = 0;
