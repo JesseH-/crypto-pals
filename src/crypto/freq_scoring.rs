@@ -28,7 +28,7 @@ fn get_letter_frequency_map() -> HashMap<char, f32> {
     frequencies.into_iter().collect::<HashMap<char, f32>>()
 }
 
-pub fn score_freq(s: &String) -> f32 {
+pub fn score_freq(s: &str) -> f32 {
     let mut score: f32 = 0.0;
     let freqs = get_letter_frequency_map();
     for c in s.chars() {
