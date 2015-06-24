@@ -7,7 +7,7 @@ authors = ["Jesse Huard <jhuard@ualberta.ca>"]
 rustc-serialize = "0.3.14"
 
 [lib]
-name = "crypto"
+name = "cryptopals"
 path = "src/lib.rs"
 
 [[bin]]

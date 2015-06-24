@@ -1,12 +1,12 @@
-extern crate crypto;
+extern crate cryptopals;
 extern crate rustc_serialize;
 
 use std::cmp::Ordering::{Equal,Greater};
 use std::io;
 use std::io::{BufRead};
 
-use crypto::crypto::freq_scoring::{get_best_fit, Fit};
-use crypto::util::{hex_string_to_bytes};
+use cryptopals::crypto::freq_scoring::{get_best_fit, Fit};
+use cryptopals::util::{hex_string_to_bytes};
 
 fn main() {
     let mut best = Fit { .. Default::default() };

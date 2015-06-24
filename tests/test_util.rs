@@ -1,6 +1,6 @@
-extern crate crypto;
+extern crate cryptopals;
 
-use crypto::util::{hex_string_to_base64, hex_string_xor, string_edit_distance};
+use cryptopals::util::{hex_string_to_base64, hex_string_xor, string_edit_distance};
 
 #[test]
 fn test_hex_to_base64() {

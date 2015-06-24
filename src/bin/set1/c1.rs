@@ -1,7 +1,7 @@
-extern crate crypto;
+extern crate cryptopals;
 
 use std::io;
-use crypto::util::{hex_string_to_base64};
+use cryptopals::util::{hex_string_to_base64};
 
 fn main() {
     let mut hex = String::new();

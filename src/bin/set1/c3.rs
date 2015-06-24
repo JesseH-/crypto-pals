@@ -1,10 +1,10 @@
-extern crate crypto;
+extern crate cryptopals;
 extern crate rustc_serialize;
 
 use std::io;
     
-use crypto::crypto::freq_scoring::{get_best_fit};
-use crypto::util::{hex_string_to_bytes};
+use cryptopals::crypto::freq_scoring::{get_best_fit};
+use cryptopals::util::{hex_string_to_bytes};
 
 fn main() {
     let mut hex = String::new();

@@ -1,9 +1,9 @@
-extern crate crypto;
+extern crate cryptopals;
 
 use std::io;
 use std::io::Read;
 
-use crypto::util::{string_repeating_xor};
+use cryptopals::util::{string_repeating_xor};
 
 fn main() {
     let mut message = String::new();

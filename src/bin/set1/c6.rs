@@ -1,10 +1,10 @@
-extern crate crypto;
+extern crate cryptopals;
 
 use std::io;
 use std::io::Read;
 
-use crypto::crypto::crack::{break_repeating_key_xor};
-use crypto::util::{base64_string_to_bytes};
+use cryptopals::crypto::crack::{break_repeating_key_xor};
+use cryptopals::util::{base64_string_to_bytes};
 
 fn main() {
     let mut message = String::new();
