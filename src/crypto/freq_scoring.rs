@@ -8,7 +8,7 @@ use util::{fixed_xor};
 pub struct Fit {
     pub score: f32,
     pub decoded: String,
-    pub pad: String,
+    pub pad: Vec<u8>,
 }
 
 fn get_letter_frequency_map() -> HashMap<char, f32> {
@@ -44,9 +44,11 @@ pub fn get_best_fit(encoded: &[u8]) -> Fit {
         let rep = (0..encoded.len()).map(|_| u).collect::<Vec<u8>>();
         let bytes = fixed_xor(&encoded, &rep);
         let result = String::from_utf8(bytes);
+        let mut pad = Vec::new();
+        pad.push(u);
         match result {
             Ok(s) => fits.push(Fit { score: score_freq(&s), decoded: s,
-                                     pad: rep }),
+                                     pad: pad }),
             Err(_) => {}
         };
     }
