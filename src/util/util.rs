@@ -4,7 +4,7 @@ use rustc_serialize::hex::{FromHex, ToHex};
 fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
     hex.from_hex()
         .ok()
-        .expect("Failed to convert string to hex")
+        .expect("Failed to convert string from hex")
 }
 
 fn fixed_xor(v1: &[u8], v2: &[u8]) -> Vec<u8> {
