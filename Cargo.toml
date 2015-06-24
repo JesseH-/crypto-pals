@@ -5,6 +5,7 @@ authors = ["Jesse Huard <jhuard@ualberta.ca>"]
 
 [dependencies]
 rustc-serialize = "0.3.14"
+rust-crypto = "*"
 
 [lib]
 name = "cryptopals"
