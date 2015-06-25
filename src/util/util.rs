@@ -1,6 +1,8 @@
 use rustc_serialize::base64::{FromBase64, ToBase64, STANDARD};
 use rustc_serialize::hex::{FromHex, ToHex};
 
+use std::collections::HashSet;
+
 pub fn hex_string_to_bytes(hex: &str) -> Vec<u8> {
     hex.from_hex()
         .ok()
@@ -63,4 +65,20 @@ pub fn string_edit_distance(string1: &str, string2: &str) -> u64 {
     let bytes1 = string1.as_bytes();
     let bytes2 = string2.as_bytes();
     edit_distance(bytes1, bytes2)
+}
+
+pub fn has_repeated_blocks(bytes: &[u8], block_size: usize) -> bool {
+    let mut map = HashSet::new();
+    let mut result = false;
+    for i in 0 .. bytes.len() / block_size {
+        let slice = &bytes[i * block_size .. (i + 1) * block_size];
+        let key = slice.to_hex();
+        if map.contains(&key) {
+            result = true;
+            break;
+        } else {
+            map.insert(key);
+        }
+    }
+    result
 }
