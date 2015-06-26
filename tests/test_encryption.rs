@@ -1,6 +1,6 @@
 extern crate cryptopals;
 
-use cryptopals::crypto::decrypt::{decrypt_aes_ecb};
+use cryptopals::crypto::decrypt::{decrypt_aes_ecb, pkcs_unpad};
 use cryptopals::crypto::encrypt::{encrypt_aes_ecb, pkcs_pad};
 
 #[test]
@@ -8,6 +8,14 @@ fn test_pkcs_pad() {
     let expected = "YELLOW SUBMARINE\x04\x04\x04\x04".to_string().into_bytes();
     let mut bytes = "YELLOW SUBMARINE".to_string().into_bytes();
     pkcs_pad(&mut bytes, 20);
+    assert_eq!(bytes, expected);
+}
+
+#[test]
+fn test_pkcs_unpad() {
+    let expected = "YELLOW SUBMARINE".to_string().into_bytes();
+    let mut bytes = "YELLOW SUBMARINE\x04\x04\x04\x04".to_string().into_bytes();
+    pkcs_unpad(&mut bytes);
     assert_eq!(bytes, expected);
 }
 
