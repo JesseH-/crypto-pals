@@ -35,3 +35,14 @@ pub fn pkcs_pad(blocks: &mut Vec<u8>, length: usize) {
         blocks.push(difference as u8);
     }
 }
+
+pub fn pkcs_unpad(blocks: &mut Vec<u8>) {
+    match blocks.last() {
+        Some(&b) => {
+            for _ in 0 .. b {
+                blocks.pop();
+            }
+        }
+        None => { }
+    }
+}
