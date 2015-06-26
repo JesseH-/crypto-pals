@@ -29,9 +29,9 @@ pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
     Ok(final_result)
 }
 
-pub fn pkcs_pad(block: &mut Vec<u8>, length: usize) {
-    let difference = length - block.len();
+pub fn pkcs_pad(blocks: &mut Vec<u8>, length: usize) {
+    let difference = length - (blocks.len() % length);
     for _ in 0 .. difference {
-        block.push(difference as u8);
+        blocks.push(difference as u8);
     }
 }
