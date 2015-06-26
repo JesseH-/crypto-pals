@@ -20,7 +20,7 @@ fn test_pkcs_unpad() {
 }
 
 #[test]
-fn test_ecb_encrypt() {
+fn test_ecb_encryption() {
     let decoded = "YELLOW SUBMARINE".to_string();
     let mut key = "AA".to_string().into_bytes();
     pkcs_pad(&mut key, 16);
