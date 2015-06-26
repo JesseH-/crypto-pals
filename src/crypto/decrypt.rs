@@ -47,13 +47,6 @@ pub fn decrypt_aes_cbc(encrypted: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     final_result
 }
 
-pub fn pkcs_pad(blocks: &mut Vec<u8>, length: usize) {
-    let difference = length - (blocks.len() % length);
-    for _ in 0 .. difference {
-        blocks.push(difference as u8);
-    }
-}
-
 pub fn pkcs_unpad(blocks: &mut Vec<u8>) {
     match blocks.last() {
         Some(&b) => {
