@@ -3,6 +3,8 @@ extern crate crypto;
 use self::crypto::{symmetriccipher, buffer, aes, blockmodes};
 use self::crypto::buffer::{ReadBuffer, WriteBuffer, BufferResult};
 
+use util::{fixed_xor};
+
 pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
     Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
     let mut decryptor = aes::ecb_decryptor(aes::KeySize::KeySize128,
@@ -27,6 +29,22 @@ pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
     }
 
     Ok(final_result)
+}
+
+pub fn decrypt_aes_cbc(encrypted: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
+    assert!(key.len() == iv.len());
+    let block_size = key.len();
+    let mut carry = iv;
+    let mut final_result = Vec::<u8>::new();
+
+    for i in 0 .. (encrypted.len() / block_size) {
+        let next_block = &encrypted[i * block_size .. (i + 1) * block_size];
+        let block = decrypt_aes_ecb(next_block, key).unwrap();
+        final_result.extend(fixed_xor(&block, carry));
+        carry = next_block;
+    }
+    pkcs_unpad(&mut final_result);
+    final_result
 }
 
 pub fn pkcs_pad(blocks: &mut Vec<u8>, length: usize) {
