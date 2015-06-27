@@ -1,7 +1,7 @@
 extern crate cryptopals;
 
-use cryptopals::crypto::decrypt::{decrypt_aes_ecb, pkcs_unpad};
-use cryptopals::crypto::encrypt::{encrypt_aes_ecb, pkcs_pad};
+use cryptopals::crypto::decrypt::{decrypt_aes_ecb, decrypt_aes_cbc, pkcs_unpad};
+use cryptopals::crypto::encrypt::{encrypt_aes_ecb, encrypt_aes_cbc, pkcs_pad};
 
 #[test]
 fn test_pkcs_pad() {
@@ -26,6 +26,17 @@ fn test_ecb_encryption() {
     pkcs_pad(&mut key, 16);
     let encrypted = encrypt_aes_ecb(&decoded.as_bytes(), &key).ok().unwrap();
     let decrypted = decrypt_aes_ecb(&encrypted, &key).ok().unwrap();
+    let result = String::from_utf8(decrypted).ok().unwrap();
+    assert_eq!(decoded, result);
+}
+
+#[test]
+fn test_cbc_encryption() {
+    let decoded = "YELLOW SUBMARINELOW SUBMARINELOW SUBMARINE".to_string();
+    let key = "ABCDEFGHIJKLMNOP".to_string().into_bytes();
+    let iv = "ZYXWVUTSRQPONMLK".to_string().into_bytes();
+    let encrypted = encrypt_aes_cbc(&decoded.as_bytes(), &key, &iv);
+    let decrypted = decrypt_aes_cbc(&encrypted, &key, &iv);
     let result = String::from_utf8(decrypted).ok().unwrap();
     assert_eq!(decoded, result);
 }
