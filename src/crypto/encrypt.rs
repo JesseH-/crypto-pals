@@ -95,3 +95,21 @@ fn random_pad(plaintext: &[u8]) -> Vec<u8> {
     }
     decoded
 }
+
+pub fn random_encrypt(plaintext: &[u8]) -> RandomResult {
+    let key = generate_key();
+    let mut padded = random_pad(plaintext);
+    pkcs_pad(&mut padded, 16);
+
+    let mut result;
+    if thread_rng().gen::<bool>() {
+        let iv = generate_key();
+        result = RandomResult { encrypted: encrypt_aes_cbc(&padded, &key, &iv),
+                                mode: Mode::CBC };
+    } else {
+        let encrypted = encrypt_aes_ecb(&padded, &key).unwrap();
+        result = RandomResult { encrypted: encrypted,
+                                mode: Mode::ECB };
+    }
+    result
+}
