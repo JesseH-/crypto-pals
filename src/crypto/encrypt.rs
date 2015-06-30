@@ -15,6 +15,11 @@ pub enum Mode {
     CBC,
 }
 
+pub struct RandomResult {
+    pub encrypted: Vec<u8>,
+    pub mode: Mode,
+}
+
 pub fn generate_key() -> Vec<u8> {
     let mut v = vec![0u8; 16];
     thread_rng().fill_bytes(&mut v);
