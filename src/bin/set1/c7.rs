@@ -7,6 +7,7 @@ use std::io::Read;
 use cryptopals::crypto::decrypt::{decrypt_aes_ecb, pkcs_unpad};
 use cryptopals::util::{base64_string_to_bytes};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let mut message = String::new();
     io::stdin().read_to_string(&mut message)

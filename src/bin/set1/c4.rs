@@ -8,6 +8,7 @@ use std::io::{BufRead};
 use cryptopals::crypto::freq_scoring::{get_best_fit, Fit};
 use cryptopals::util::{hex_string_to_bytes};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let mut best = Fit { .. Default::default() };
     let stdin = io::stdin();

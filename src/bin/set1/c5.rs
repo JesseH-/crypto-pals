@@ -5,6 +5,7 @@ use std::io::Read;
 
 use cryptopals::util::{string_repeating_xor};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let mut message = String::new();
     io::stdin().read_to_string(&mut message)

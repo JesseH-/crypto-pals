@@ -6,6 +6,7 @@ use std::io::Read;
 use cryptopals::crypto::encrypt::{random_encrypt, Mode};
 use cryptopals::util::{has_repeated_blocks};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let mut message = String::new();
     io::stdin().read_to_string(&mut message)

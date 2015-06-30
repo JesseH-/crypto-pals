@@ -6,6 +6,7 @@ use std::io::BufRead;
 
 use cryptopals::util::{has_repeated_blocks, hex_string_to_bytes};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let stdin = io::stdin();
     for line in stdin.lock().lines() {

@@ -3,6 +3,7 @@ extern crate cryptopals;
 use std::io;
 use cryptopals::util::{hex_string_to_base64};
 
+#[cfg_attr(test, allow(dead_code))]
 fn main() {
     let mut hex = String::new();
 
