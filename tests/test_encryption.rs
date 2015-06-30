@@ -31,12 +31,29 @@ fn test_ecb_encryption() {
 }
 
 #[test]
+fn test_ecb_encryption_unaligned() {
+    let decoded = "YELLOW SUBMARINEEEEE".to_string();
+    let mut plaintext = decoded.clone().into_bytes();
+    let mut key = "AA".to_string().into_bytes();
+    pkcs_pad(&mut plaintext, 16);
+    pkcs_pad(&mut key, 16);
+    let encrypted = encrypt_aes_ecb(&plaintext, &key).ok().unwrap();
+    let mut decrypted = decrypt_aes_ecb(&encrypted, &key).ok().unwrap();
+    pkcs_unpad(&mut decrypted);
+    let result = String::from_utf8(decrypted).ok().unwrap();
+    assert_eq!(decoded, result);
+}
+
+#[test]
 fn test_cbc_encryption() {
     let decoded = "YELLOW SUBMARINELOW SUBMARINELOW SUBMARINE".to_string();
     let key = "ABCDEFGHIJKLMNOP".to_string().into_bytes();
     let iv = "ZYXWVUTSRQPONMLK".to_string().into_bytes();
-    let encrypted = encrypt_aes_cbc(&decoded.as_bytes(), &key, &iv);
-    let decrypted = decrypt_aes_cbc(&encrypted, &key, &iv);
+    let mut plaintext = decoded.clone().into_bytes();
+    pkcs_pad(&mut plaintext, 16);
+    let encrypted = encrypt_aes_cbc(&plaintext, &key, &iv);
+    let mut decrypted = decrypt_aes_cbc(&encrypted, &key, &iv);
+    pkcs_unpad(&mut decrypted);
     let result = String::from_utf8(decrypted).ok().unwrap();
     assert_eq!(decoded, result);
 }

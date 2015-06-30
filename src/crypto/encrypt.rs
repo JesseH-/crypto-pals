@@ -17,6 +17,7 @@ pub fn generate_key() -> Vec<u8> {
 
 pub fn encrypt_aes_ecb(plaintext: &[u8], key: &[u8]) ->
     Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
+    assert!(plaintext.len() % key.len() == 0);
     let mut encryptor = aes::ecb_encryptor(aes::KeySize::KeySize128,
                                            key, blockmodes::NoPadding);
 
@@ -43,6 +44,7 @@ pub fn encrypt_aes_ecb(plaintext: &[u8], key: &[u8]) ->
 
 pub fn encrypt_aes_cbc(plaintext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     assert!(key.len() == iv.len());
+    assert!(plaintext.len() % key.len() == 0);
     let block_size = key.len();
     let mut final_result = Vec::<u8>::new();
 
@@ -50,15 +52,7 @@ pub fn encrypt_aes_cbc(plaintext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     for i in 0 .. (plaintext.len() + block_size -1) / block_size {
         let end = min((i + 1) * block_size, plaintext.len());
         let next_block = &plaintext[i * block_size .. end];
-
-        let mut block;
-        if next_block.len() < block_size {
-            block = next_block.to_vec();
-            pkcs_pad(&mut block, block_size);
-            block = fixed_xor(&block, &carry);
-        } else {
-            block = fixed_xor(next_block, &carry);
-        }
+        let block = fixed_xor(next_block, &carry);
 
         carry = encrypt_aes_ecb(&block, key).unwrap();
         final_result.extend(carry.iter().cloned());

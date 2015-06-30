@@ -7,6 +7,7 @@ use util::{fixed_xor};
 
 pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
     Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
+    assert!(encrypted.len() % key.len() == 0);
     let mut decryptor = aes::ecb_decryptor(aes::KeySize::KeySize128,
                                            key, blockmodes::NoPadding);
 
@@ -33,6 +34,7 @@ pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
 
 pub fn decrypt_aes_cbc(encrypted: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     assert!(key.len() == iv.len());
+    assert!(encrypted.len() % key.len() == 0);
     let block_size = key.len();
     let mut carry = iv;
     let mut final_result = Vec::<u8>::new();
@@ -43,7 +45,6 @@ pub fn decrypt_aes_cbc(encrypted: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
         final_result.extend(fixed_xor(&block, carry));
         carry = next_block;
     }
-    pkcs_unpad(&mut final_result);
     final_result
 }
 
