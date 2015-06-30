@@ -77,3 +77,21 @@ pub fn pkcs_pad(blocks: &mut Vec<u8>, length: usize) {
         blocks.push(difference as u8);
     }
 }
+
+fn random_pad(plaintext: &[u8]) -> Vec<u8> {
+    let mut rng = thread_rng();
+    let mut decoded = Vec::new();
+
+    for _ in 0 .. rng.gen_range(5, 11) {
+        decoded.push(rng.gen::<u8>());
+    }
+
+    for u in plaintext.iter() {
+        decoded.push(*u);
+    }
+
+    for _ in 0 .. rng.gen_range(5, 11) {
+        decoded.push(rng.gen::<u8>());
+    }
+    decoded
+}
