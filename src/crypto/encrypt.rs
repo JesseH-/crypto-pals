@@ -15,13 +15,13 @@ pub fn generate_key() -> Vec<u8> {
     v
 }
 
-pub fn encrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
+pub fn encrypt_aes_ecb(plaintext: &[u8], key: &[u8]) ->
     Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
     let mut encryptor = aes::ecb_encryptor(aes::KeySize::KeySize128,
                                            key, blockmodes::NoPadding);
 
     let mut final_result = Vec::<u8>::new();
-    let mut read_buf = buffer::RefReadBuffer::new(encrypted);
+    let mut read_buf = buffer::RefReadBuffer::new(plaintext);
     let mut buf = [0; 4096];
     let mut write_buf = buffer::RefWriteBuffer::new(&mut buf);
 
