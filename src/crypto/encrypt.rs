@@ -114,3 +114,14 @@ pub fn random_encrypt(plaintext: &[u8]) -> RandomResult {
     }
     result
 }
+
+pub fn append_ecb_encrypt(plaintext: &[u8], append: &[u8], key: &[u8])
+                          -> Vec<u8>
+{
+    let mut decoded = plaintext.to_vec();
+    for u in append.iter() {
+        decoded.push(*u);
+    }
+    pkcs_pad(&mut decoded, key.len());
+    encrypt_aes_ecb(&decoded, key).unwrap()
+}
