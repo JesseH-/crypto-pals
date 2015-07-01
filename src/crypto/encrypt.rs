@@ -26,8 +26,9 @@ pub fn generate_key() -> Vec<u8> {
     v
 }
 
-pub fn encrypt_aes_ecb(plaintext: &[u8], key: &[u8]) ->
-    Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
+pub fn encrypt_aes_ecb(plaintext: &[u8], key: &[u8])
+                       -> Result<Vec<u8>, symmetriccipher::SymmetricCipherError>
+{
     assert!(plaintext.len() % key.len() == 0);
     let mut encryptor = aes::ecb_encryptor(aes::KeySize::KeySize128,
                                            key, blockmodes::NoPadding);
