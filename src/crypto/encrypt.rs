@@ -99,7 +99,7 @@ fn random_pad(plaintext: &[u8]) -> Vec<u8> {
 pub fn random_encrypt(plaintext: &[u8]) -> RandomResult {
     let key = generate_key();
     let mut padded = random_pad(plaintext);
-    pkcs_pad(&mut padded, 16);
+    pkcs_pad(&mut padded, key.len());
 
     let mut result;
     if thread_rng().gen::<bool>() {
