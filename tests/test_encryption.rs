@@ -57,3 +57,24 @@ fn test_cbc_encryption() {
     let result = String::from_utf8(decrypted).ok().unwrap();
     assert_eq!(decoded, result);
 }
+
+#[test]
+fn test_pkcs_valid_padding() {
+    let mut decoded = "ICE ICE BABY\x04\x04\x04\x04".to_string().into_bytes();
+    let result = pkcs_unpad(&mut decoded);
+    assert!(result.is_ok());
+}
+
+#[test]
+fn test_pkcs_short_padding() {
+    let mut decoded = "ICE ICE BABY\x05\x05\x05\x05".to_string().into_bytes();
+    let result = pkcs_unpad(&mut decoded);
+    assert!(result.is_err());
+}
+
+#[test]
+fn test_pkcs_wrong_padding() {
+    let mut decoded = "ICE ICE BABY\x01\x02\x03\x04".to_string().into_bytes();
+    let result = pkcs_unpad(&mut decoded);
+    assert!(result.is_err());
+}
