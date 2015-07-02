@@ -15,7 +15,7 @@ fn test_pkcs_pad() {
 fn test_pkcs_unpad() {
     let expected = "YELLOW SUBMARINE".to_string().into_bytes();
     let mut bytes = "YELLOW SUBMARINE\x04\x04\x04\x04".to_string().into_bytes();
-    pkcs_unpad(&mut bytes);
+    pkcs_unpad(&mut bytes).unwrap();
     assert_eq!(bytes, expected);
 }
 
@@ -39,7 +39,7 @@ fn test_ecb_encryption_unaligned() {
     pkcs_pad(&mut key, 16);
     let encrypted = encrypt_aes_ecb(&plaintext, &key).ok().unwrap();
     let mut decrypted = decrypt_aes_ecb(&encrypted, &key).ok().unwrap();
-    pkcs_unpad(&mut decrypted);
+    pkcs_unpad(&mut decrypted).unwrap();
     let result = String::from_utf8(decrypted).ok().unwrap();
     assert_eq!(decoded, result);
 }
@@ -53,7 +53,7 @@ fn test_cbc_encryption() {
     pkcs_pad(&mut plaintext, 16);
     let encrypted = encrypt_aes_cbc(&plaintext, &key, &iv);
     let mut decrypted = decrypt_aes_cbc(&encrypted, &key, &iv);
-    pkcs_unpad(&mut decrypted);
+    pkcs_unpad(&mut decrypted).unwrap();
     let result = String::from_utf8(decrypted).ok().unwrap();
     assert_eq!(decoded, result);
 }

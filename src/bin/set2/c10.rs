@@ -17,7 +17,7 @@ fn main() {
     let key = "YELLOW SUBMARINE".as_bytes();
     let iv = vec![0u8; 16];
     let mut decrypted_bytes = decrypt_aes_cbc(&hex, &key, &iv);
-    pkcs_unpad(&mut decrypted_bytes);
+    pkcs_unpad(&mut decrypted_bytes).unwrap();
     let decrypted = String::from_utf8(decrypted_bytes).ok().unwrap();
     println!("{}", decrypted);
 }

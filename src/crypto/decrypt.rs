@@ -48,13 +48,21 @@ pub fn decrypt_aes_cbc(encrypted: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     final_result
 }
 
-pub fn pkcs_unpad(blocks: &mut Vec<u8>) {
+pub fn pkcs_unpad(blocks: &mut Vec<u8>) -> Result<(), &'static str> {
     match blocks.last() {
         Some(&b) => {
             for _ in 0 .. b {
-                blocks.pop();
+                match blocks.pop() {
+                    Some(l) => {
+                        if l != b {
+                            return Err("Next byte does not match padding.")
+                        }
+                    }
+                    None => return Err("Ran out of padding.")
+                }
             }
         }
         None => { }
     }
+    Ok(())
 }

@@ -16,7 +16,7 @@ fn main() {
     let hex = base64_string_to_bytes(&message);
     let key = "YELLOW SUBMARINE".as_bytes();
     let mut decrypted_bytes = decrypt_aes_ecb(&hex, &key).ok().unwrap();
-    pkcs_unpad(&mut decrypted_bytes);
+    pkcs_unpad(&mut decrypted_bytes).unwrap();
     let decrypted = String::from_utf8(decrypted_bytes).ok().unwrap();
     println!("{}", decrypted);
 }
