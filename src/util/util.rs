@@ -82,3 +82,9 @@ pub fn has_repeated_blocks(bytes: &[u8], block_size: usize) -> bool {
     }
     result
 }
+
+pub fn concat_bytes(vec: &mut Vec<u8>, bytes: &[u8]) {
+    for u in bytes.iter() {
+        vec.push(*u);
+    }
+}

@@ -7,7 +7,7 @@ use self::crypto::{symmetriccipher, buffer, aes, blockmodes};
 use self::crypto::buffer::{ReadBuffer, WriteBuffer, BufferResult};
 use self::rand::{thread_rng, Rng};
 
-use util::{fixed_xor};
+use util::{concat_bytes, fixed_xor};
 
 #[derive(PartialEq)]
 pub enum Mode {
@@ -87,9 +87,7 @@ fn random_pad(plaintext: &[u8]) -> Vec<u8> {
         decoded.push(rng.gen::<u8>());
     }
 
-    for u in plaintext.iter() {
-        decoded.push(*u);
-    }
+    concat_bytes(&mut decoded, &plaintext);
 
     for _ in 0 .. rng.gen_range(5, 11) {
         decoded.push(rng.gen::<u8>());
@@ -119,9 +117,7 @@ pub fn append_ecb_encrypt(plaintext: &[u8], append: &[u8], key: &[u8])
                           -> Vec<u8>
 {
     let mut decoded = plaintext.to_vec();
-    for u in append.iter() {
-        decoded.push(*u);
-    }
+    concat_bytes(&mut decoded, &append);
     pkcs_pad(&mut decoded, key.len());
     encrypt_aes_ecb(&decoded, key).unwrap()
 }
