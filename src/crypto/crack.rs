@@ -3,7 +3,7 @@ use std::cmp::Ordering::{Equal, Greater};
 
 use crypto::encrypt::{append_ecb_encrypt};
 use crypto::freq_scoring::{score_freq, get_best_fit, Fit};
-use util::{edit_distance, repeating_xor};
+use util::{concat_bytes, edit_distance, has_repeated_blocks, repeating_xor};
 
 pub struct KeyFit {
     pub size: usize,
@@ -89,4 +89,32 @@ fn test_find_key_size() {
         let append = vec![7u8; i];
         assert_eq!(16, find_key_size(&append, &key));
     }
+}
+
+pub fn break_ecb(append: &[u8], key: &[u8]) -> Vec<u8> {
+    let mut cracked = Vec::new();
+    let size = find_key_size(append, key);
+    let test = append_ecb_encrypt(&vec![0u8; size * 4], append, key);
+    assert!(has_repeated_blocks(&test, size));
+    for i in 0 .. (append.len() + size - 1) / size {
+        if cracked.len() == append.len() { break; }
+        for j in 0 .. size {
+            let pad = vec![0u8; size - (j + 1)];
+            let matching = append_ecb_encrypt(&pad, append, key);
+            for u in 10 .. 128u8 {
+                let mut plaintext = pad.to_vec();
+                concat_bytes(&mut plaintext, &cracked);
+                plaintext.push(u);
+                let encrypted = append_ecb_encrypt(&plaintext, append, key);
+                let match_slice = &matching[i * size .. (i + 1) * size];
+                let enc_slice = &encrypted[i * size .. (i + 1) * size];
+                if *match_slice == *enc_slice {
+                    cracked.push(u);
+                    break;
+                }
+            }
+            if cracked.len() == append.len() { break; }
+        }
+    }
+    cracked
 }
