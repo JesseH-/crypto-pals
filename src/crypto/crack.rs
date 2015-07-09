@@ -81,3 +81,12 @@ fn find_key_size(append: &[u8], key: &[u8]) -> usize {
     }
     size
 }
+
+#[test]
+fn test_find_key_size() {
+    let key = [9u8; 16];
+    for i in 1 .. 64 {
+        let append = vec![7u8; i];
+        assert_eq!(16, find_key_size(&append, &key));
+    }
+}
