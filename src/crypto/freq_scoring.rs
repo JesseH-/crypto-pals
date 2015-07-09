@@ -39,9 +39,9 @@ pub fn score_freq(s: &str) -> f32 {
 
 pub fn get_best_fit(encoded: &[u8]) -> Fit {
     let mut fits = Vec::new();
-    for i in 0..128 {
+    for i in 0 .. 128 {
         let u = i as u8;
-        let rep = (0..encoded.len()).map(|_| u).collect::<Vec<u8>>();
+        let rep = (0 .. encoded.len()).map(|_| u).collect::<Vec<u8>>();
         let bytes = fixed_xor(&encoded, &rep);
         let result = String::from_utf8(bytes);
         let mut pad = Vec::new();

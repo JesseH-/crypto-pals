@@ -61,7 +61,7 @@ pub fn encrypt_aes_cbc(plaintext: &[u8], key: &[u8], iv: &[u8]) -> Vec<u8>{
     let mut final_result = Vec::<u8>::new();
 
     let mut carry = iv.to_vec();
-    for i in 0 .. (plaintext.len() + block_size -1) / block_size {
+    for i in 0 .. (plaintext.len() + block_size - 1) / block_size {
         let end = min((i + 1) * block_size, plaintext.len());
         let next_block = &plaintext[i * block_size .. end];
         let block = fixed_xor(next_block, &carry);
