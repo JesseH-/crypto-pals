@@ -47,3 +47,7 @@ path = "src/bin/set2/c10.rs"
 [[bin]]
 name = "set2c11"
 path = "src/bin/set2/c11.rs"
+
+[[bin]]
+name = "set2c12"
+path = "src/bin/set2/c12.rs"
