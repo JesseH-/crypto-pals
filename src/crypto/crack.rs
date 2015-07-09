@@ -1,6 +1,7 @@
 use std::cmp::{min};
 use std::cmp::Ordering::{Equal, Greater};
 
+use crypto::encrypt::{append_ecb_encrypt};
 use crypto::freq_scoring::{score_freq, get_best_fit, Fit};
 use util::{edit_distance, repeating_xor};
 
@@ -65,4 +66,18 @@ pub fn break_repeating_key_xor(message: &[u8]) -> Fit {
         }
     }
     best
+}
+
+fn find_key_size(append: &[u8], key: &[u8]) -> usize {
+    let mut size = 0;
+    let zeroes = vec![0u8; 64];
+    let start = append_ecb_encrypt(&[0], append, key).len();
+    for i in 1 .. zeroes.len() {
+        let end = append_ecb_encrypt(&zeroes[0 .. i], append, key).len();
+        if start != end {
+            size = end - start;
+            break;
+        }
+    }
+    size
 }
