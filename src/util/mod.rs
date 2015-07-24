@@ -6,3 +6,4 @@ pub use self::util::{base64_string_to_hex, base64_string_to_bytes,
                      string_edit_distance};
 
 pub mod util;
+pub mod cookie;
