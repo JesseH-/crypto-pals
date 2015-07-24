@@ -2,7 +2,7 @@ extern crate cryptopals;
 
 use std::collections::HashMap;
 
-use cryptopals::util::cookie::{encode_cookie, parse_cookie};
+use cryptopals::util::cookie::{encode_cookie, parse_cookie, profile_for};
 use cryptopals::util::{hex_string_to_base64, hex_string_xor, string_edit_distance};
 
 #[test]
@@ -46,4 +46,19 @@ fn test_encode_cookie() {
     map.insert("baz", "qux");
     map.insert("zap", "zazzle");
     assert_eq!(map, parse_cookie(&encode_cookie(&map)));
+}
+
+#[test]
+fn test_profile_for() {
+    let email = "foo@bar.com";
+    assert_eq!(profile_for(&email).unwrap(),
+               "email=foo@bar.com&uid=10&role=user");
+}
+
+#[test]
+fn test_profile_for_illegal_characters() {
+    let email1 = "foo&";
+    let email2 = "bar=";
+    assert!(profile_for(&email1).is_err());
+    assert!(profile_for(&email2).is_err());
 }
