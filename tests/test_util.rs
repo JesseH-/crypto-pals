@@ -2,7 +2,7 @@ extern crate cryptopals;
 
 use std::collections::HashMap;
 
-use cryptopals::util::cookie::{parse_cookie};
+use cryptopals::util::cookie::{encode_cookie, parse_cookie};
 use cryptopals::util::{hex_string_to_base64, hex_string_xor, string_edit_distance};
 
 #[test]
@@ -37,4 +37,13 @@ fn test_parse_cookie() {
     map.insert("baz", "qux");
     map.insert("zap", "zazzle");
     assert_eq!(map, parse_cookie(&string));
+}
+
+#[test]
+fn test_encode_cookie() {
+    let mut map = HashMap::new();
+    map.insert("foo", "bar");
+    map.insert("baz", "qux");
+    map.insert("zap", "zazzle");
+    assert_eq!(map, parse_cookie(&encode_cookie(&map)));
 }
