@@ -18,3 +18,26 @@ pub fn encode_cookie(map: &HashMap<&str, &str>) -> String {
     result.pop();
     result
 }
+
+fn encode_profile(map: &HashMap<&str, &str>) -> String {
+    let mut result = String::new();
+    result.push_str("email=");
+    result.push_str(map.get("email").unwrap());
+    result.push_str("&uid=");
+    result.push_str(map.get("uid").unwrap());
+    result.push_str("&role=");
+    result.push_str(map.get("role").unwrap());
+    result
+}
+
+pub fn profile_for(email: &str) -> Result<String, &str> {
+    if email.contains("&") || email.contains("=") {
+        return Err("Email contains illegal characters.")
+    }
+
+    let mut map = HashMap::new();
+    map.insert("uid", "10");
+    map.insert("role", "user");
+    map.insert("email", email);
+    Ok(encode_profile(&map))
+}
