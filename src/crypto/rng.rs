@@ -72,3 +72,28 @@ impl SeedableRng<u32> for MT {
         }
     }
 }
+
+fn undo_right_shift_xor(x: u32, shift: u32) -> u32 {
+    let mut y = 0;
+    for i in 0 .. 32 {
+        y |= ((y >> shift) ^ x) & (1 << (31 - i));
+    }
+    y
+}
+
+fn undo_left_shift_mask_xor(x: u32, shift: u32, mask: u32) -> u32 {
+    let mut y = 0;
+    for i in 0 .. 32 {
+        y |= (((y << shift) & mask) ^ x) & (1 << i);
+    }
+    y
+}
+
+pub fn untemper(output: u32) -> u32 {
+    let mut state = output;
+    state = undo_right_shift_xor(state, L);
+    state = undo_left_shift_mask_xor(state, T, C);
+    state = undo_left_shift_mask_xor(state, S, B);
+    state = undo_right_shift_xor(state, U);
+    state
+}
