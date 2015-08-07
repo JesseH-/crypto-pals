@@ -7,6 +7,7 @@ authors = ["Jesse Huard <jhuard@ualberta.ca>"]
 rustc-serialize = "0.3.14"
 rust-crypto = "*"
 rand = "*"
+time = "0.1"
 
 [lib]
 name = "cryptopals"
