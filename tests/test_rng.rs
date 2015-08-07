@@ -2,7 +2,7 @@ extern crate cryptopals;
 extern crate rand;
 extern crate time;
 
-use cryptopals::crypto::rng::{MT};
+use cryptopals::crypto::rng::{MT, untemper};
 use rand::{Rng, SeedableRng, thread_rng};
 use time::{get_time};
 
@@ -27,5 +27,14 @@ fn test_seed_recovery_from_time() {
             assert_eq!(seed, time);
             break;
         }
+    }
+}
+
+#[test]
+fn test_untemper() {
+    let mut m: MT = SeedableRng::from_seed(314159);
+    for i in 0 .. 624 {
+        let output = m.gen::<u32>();
+        assert_eq!(untemper(output), m.state[i]);
     }
 }
