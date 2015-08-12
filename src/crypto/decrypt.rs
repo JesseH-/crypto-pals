@@ -1,9 +1,12 @@
 extern crate crypto;
 
+use std::collections::HashMap;
+
 use self::crypto::{symmetriccipher, buffer, aes, blockmodes};
 use self::crypto::buffer::{ReadBuffer, WriteBuffer, BufferResult};
 
 use util::{fixed_xor};
+use util::cookie::{parse_cookie};
 
 pub fn decrypt_aes_ecb(encrypted: &[u8], key: &[u8]) ->
     Result<Vec<u8>, symmetriccipher::SymmetricCipherError> {
@@ -65,4 +68,13 @@ pub fn pkcs_unpad(blocks: &mut Vec<u8>) -> Result<(), &'static str> {
         None => { }
     }
     Ok(())
+}
+
+pub fn decrypt_profile(encrypted: &[u8], key: &[u8])
+                       -> HashMap<String, String> {
+                           let mut decrypted = decrypt_aes_ecb(&encrypted, &key).unwrap();
+                           println!("{:?}", decrypted);
+                           println!("{:?}", String::from_utf8(decrypted.clone()));
+    pkcs_unpad(&mut decrypted).unwrap();
+    parse_cookie(&String::from_utf8(decrypted).unwrap())
 }
