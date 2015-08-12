@@ -33,18 +33,18 @@ fn test_edit_distance() {
 fn test_parse_cookie() {
     let string = "foo=bar&baz=qux&zap=zazzle";
     let mut map = HashMap::new();
-    map.insert("foo", "bar");
-    map.insert("baz", "qux");
-    map.insert("zap", "zazzle");
+    map.insert("foo".to_string(), "bar".to_string());
+    map.insert("baz".to_string(), "qux".to_string());
+    map.insert("zap".to_string(), "zazzle".to_string());
     assert_eq!(map, parse_cookie(&string));
 }
 
 #[test]
 fn test_encode_cookie() {
     let mut map = HashMap::new();
-    map.insert("foo", "bar");
-    map.insert("baz", "qux");
-    map.insert("zap", "zazzle");
+    map.insert("foo".to_string(), "bar".to_string());
+    map.insert("baz".to_string(), "qux".to_string());
+    map.insert("zap".to_string(), "zazzle".to_string());
     assert_eq!(map, parse_cookie(&encode_cookie(&map)));
 }
 
