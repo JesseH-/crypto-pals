@@ -1,7 +1,9 @@
 use std::cmp::{min};
 use std::cmp::Ordering::{Equal, Greater};
+use std::collections::HashMap;
 
-use crypto::encrypt::{append_ecb_encrypt};
+use crypto::decrypt::{decrypt_profile};
+use crypto::encrypt::{append_ecb_encrypt, generate_encrypted_profile};
 use crypto::freq_scoring::{score_freq, get_best_fit, Fit};
 use util::{concat_bytes, edit_distance, has_repeated_blocks, repeating_xor};
 
@@ -117,4 +119,19 @@ pub fn break_ecb(append: &[u8], key: &[u8]) -> Vec<u8> {
         }
     }
     cracked
+}
+
+pub fn ecb_cut_and_paste_break_profile(key: &[u8]) -> HashMap<String, String> {
+    let mut email_bytes = "foo@domainadmin".to_string().into_bytes();
+    for _ in 0 .. 11 {
+        email_bytes.push(0x0B);
+    }
+    let mut email = String::from_utf8(email_bytes).unwrap();
+    email.push_str(".ca");
+    let encrypted = generate_encrypted_profile(&email, &key);
+    let mut modified = Vec::new();
+    modified.extend(encrypted[0 .. 16].iter().cloned());
+    modified.extend(encrypted[32 .. 48].iter().cloned());
+    modified.extend(encrypted[16 .. 32].iter().cloned());
+    decrypt_profile(&modified, &key)
 }
