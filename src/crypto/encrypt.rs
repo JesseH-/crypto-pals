@@ -8,6 +8,7 @@ use self::crypto::buffer::{ReadBuffer, WriteBuffer, BufferResult};
 use self::rand::{thread_rng, Rng};
 
 use util::{concat_bytes, fixed_xor};
+use util::cookie::{profile_for};
 
 #[derive(PartialEq)]
 pub enum Mode {
@@ -120,4 +121,11 @@ pub fn append_ecb_encrypt(plaintext: &[u8], append: &[u8], key: &[u8])
     concat_bytes(&mut decoded, &append);
     pkcs_pad(&mut decoded, key.len());
     encrypt_aes_ecb(&decoded, key).unwrap()
+}
+
+pub fn generate_encrypted_profile(email: &str, key: &[u8]) -> Vec<u8> {
+    let profile = profile_for(&email).unwrap();
+    let mut bytes = profile.into_bytes();
+    pkcs_pad(&mut bytes, key.len());
+    encrypt_aes_ecb(&bytes, &key).unwrap()
 }
