@@ -1,7 +1,9 @@
 extern crate cryptopals;
 
+use cryptopals::crypto::crack::{ecb_cut_and_paste_break_profile};
 use cryptopals::crypto::encrypt::{random_encrypt, Mode};
 use cryptopals::util::{has_repeated_blocks};
+use cryptopals::util::cookie::{encode_profile};
 
 #[test]
 fn test_encryption_oracle() {
@@ -16,4 +18,14 @@ fn test_encryption_oracle() {
         }
         assert!(mode == result.mode);
     }
+}
+
+#[test]
+fn test_ecb_cut_and_paste() {
+    let key = "YELLOW SUBMARINE".to_string().into_bytes();
+    let profile = ecb_cut_and_paste_break_profile(&key);
+    assert_eq!(profile.get("role").unwrap(), "admin");
+    assert_eq!(profile.get("email").unwrap(), "foo@domain.ca");
+    assert_eq!(encode_profile(&profile),
+               "email=foo@domain.ca&uid=10&role=admin");
 }
