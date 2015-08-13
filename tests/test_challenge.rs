@@ -1,6 +1,7 @@
 extern crate cryptopals;
 
-use cryptopals::crypto::crack::{ecb_cut_and_paste_break_profile};
+use cryptopals::crypto::crack::{cbc_bitflip_attack,
+                                ecb_cut_and_paste_break_profile};
 use cryptopals::crypto::encrypt::{random_encrypt, Mode};
 use cryptopals::util::{has_repeated_blocks};
 use cryptopals::util::cookie::{encode_profile};
@@ -28,4 +29,11 @@ fn test_ecb_cut_and_paste() {
     assert_eq!(profile.get("email").unwrap(), "foo@domain.ca");
     assert_eq!(encode_profile(&profile),
                "email=foo@domain.ca&uid=10&role=admin");
+}
+
+#[test]
+fn test_cbc_bitflip_attack() {
+    let key = "YELLOW SUBMARINE".to_string().into_bytes();
+    let iv = "foobarfoobarfoob".to_string().into_bytes();
+    assert!(cbc_bitflip_attack(&key, &iv));
 }
