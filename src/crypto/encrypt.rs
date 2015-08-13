@@ -129,3 +129,23 @@ pub fn generate_encrypted_profile(email: &str, key: &[u8]) -> Vec<u8> {
     pkcs_pad(&mut bytes, key.len());
     encrypt_aes_ecb(&bytes, &key).unwrap()
 }
+
+fn escape_characters(input: &mut String) {
+    input.replace(";", "%3B");
+    input.replace("=", "%3D");
+}
+
+pub fn bitflip_encrypt(plaintext: &str, key: &[u8], iv: &[u8]) -> Vec<u8> {
+    let mut escaped = String::from(plaintext);
+    escape_characters(&mut escaped);
+    let mut bytes = "comment1=cooking%20MCs;userdata="
+        .to_string()
+        .into_bytes();
+    let append_bytes = ";comment2=%20like%20a%20pound%20of%20bacon"
+        .to_string()
+        .into_bytes();
+    concat_bytes(&mut bytes, &escaped.into_bytes());
+    concat_bytes(&mut bytes, &append_bytes);
+    pkcs_pad(&mut bytes, key.len());
+    encrypt_aes_cbc(&bytes, &key, &iv)
+}
