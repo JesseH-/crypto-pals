@@ -78,3 +78,9 @@ pub fn decrypt_profile(encrypted: &[u8], key: &[u8])
     pkcs_unpad(&mut decrypted).unwrap();
     parse_cookie(&String::from_utf8(decrypted).unwrap())
 }
+
+pub fn bitflip_decrypt(encrypted: &[u8], key: &[u8], iv: &[u8]) -> bool {
+    let bytes = decrypt_aes_cbc(&encrypted, &key, &iv);
+    let decrypted = String::from_utf8_lossy(&bytes);
+    decrypted.contains(";admin=true;")
+}
