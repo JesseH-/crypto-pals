@@ -2,8 +2,9 @@ use std::cmp::{min};
 use std::cmp::Ordering::{Equal, Greater};
 use std::collections::HashMap;
 
-use crypto::decrypt::{decrypt_profile};
-use crypto::encrypt::{append_ecb_encrypt, generate_encrypted_profile};
+use crypto::decrypt::{bitflip_decrypt, decrypt_profile};
+use crypto::encrypt::{append_ecb_encrypt, bitflip_encrypt,
+                      generate_encrypted_profile};
 use crypto::freq_scoring::{score_freq, get_best_fit, Fit};
 use util::{concat_bytes, edit_distance, has_repeated_blocks, repeating_xor};
 
@@ -134,4 +135,13 @@ pub fn ecb_cut_and_paste_break_profile(key: &[u8]) -> HashMap<String, String> {
     modified.extend(encrypted[32 .. 48].iter().cloned());
     modified.extend(encrypted[16 .. 32].iter().cloned());
     decrypt_profile(&modified, &key)
+}
+
+pub fn cbc_bitflip_attack(key: &[u8], iv: &[u8]) -> bool {
+    let mut encrypted = bitflip_encrypt("aaaaaaaaaaaaaaaa:admin<true:",
+                                        &key, &iv);
+    encrypted[32] ^= 1;
+    encrypted[38] ^= 1;
+    encrypted[43] ^= 1;
+    bitflip_decrypt(&encrypted, &key, &iv)
 }
